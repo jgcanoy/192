@@ -58,7 +58,7 @@ $(function(){
 	<a href="#" onclick="toggle('body1hidden');"><font color="yellow">Register here. </font></a>
 </form>
 </div>
-<div id="body1hidden"><?=form_open('/main/mailkey')?>
+<div id="body1hidden"><?=form_open('/main/sendKey')?>
 	<label>Register:</label>
 	<input name="email" type="text" value="Email address here..." onFocus="this.value=''"/>
 	<input name="" type="submit" class="botton" value="SUBMIT" />

@@ -1,0 +1,1 @@
+<html><head>	<link rel="stylesheet" type="text/css" href="<?=$css?>" />	<title><?=$title?></title></head><body>	<h1>ExQuest | Register</h1>	<h3>Activation Successful.</h3>	<?=anchor('reg/step1', 'Start Registration')?></body></html>

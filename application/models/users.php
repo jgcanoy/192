@@ -21,10 +21,31 @@ class Users extends CI_Model {
 			return 0;
 		}
 	}
+	function findwithkey($key = 0) {
+		$this->db->select("*");
+		$this->db->from("users");
+		$this->db->where("activationKey", $key);
+		$query = $this->db->get();
+		
+		$row = $query->row_array();
+		return $row['password'];
+	}
 	function userRow($id) {
 		$this->db->select("*");
 		$this->db->from("users");
 		$this->db->where("id", $id);
+		$query = $this->db->get();
+
+		return $query;
+	}
+	function updateUserCompany($cid, $user)  {
+		$data['cid'] = $cid;
+		$this->db->update('users', $data, "id = ".$user);
+	}
+	function getPending($cid, $isAdmin, $isLeader, $isOfficer) {
+		$this->db->select("*");
+		$this->db->from('request');
+		$this->db->where("cid", $cid);
 		$query = $this->db->get();
 
 		return $query;

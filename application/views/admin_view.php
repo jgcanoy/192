@@ -69,7 +69,10 @@ window.onload=function(){
 		<br />
 		<br />
 		<br />
+		
 		<h2>Pending Requests</h2>
+		
+		<?=$t1?>
 		
 		<table cellpadding="2" class="altrowstable" id="alternatecolor"> 
 			<thead> 
