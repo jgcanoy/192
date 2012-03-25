@@ -100,11 +100,11 @@ class Reg extends CI_Controller{
 	function add(){
 		//generate activation key
 		$activationKey = random_string('unique');
-		//send activation key to new user
-		$this->sendActivation($activationKey);
 		//add new user to user table
 		$this->load->model('ems_model');
 		$this->ems_model->addUser($activationKey);
+		//send activation key to new user
+		$this->sendActivation($activationKey);
 	}
 	function sendActivation($activationKey){
 		$this->load->helper('string');
@@ -113,6 +113,11 @@ class Reg extends CI_Controller{
 		$message = "Please click the activation link below to activate your account.\n".
 						'http://localhost/192/index.php/main/activate/'.$activationKey;
 		$subject = 'ExQuest Activation Key';
+		
+		$this->load->model('users');
+		$user = $this->users->findwithkey($activationKey);
+			
+		$message = $message."\n\nUsername: ".$user['email']."\nTemporary Password: ".$user['password'].;
 		
 		$this->load->helper('email');
 			$emailConfig = array(

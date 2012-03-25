@@ -28,7 +28,7 @@ class Users extends CI_Model {
 		$query = $this->db->get();
 		
 		$row = $query->row_array();
-		return $row['password'];
+		return $row;
 	}
 	function userRow($id) {
 		$this->db->select("*");

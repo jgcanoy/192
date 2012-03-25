@@ -44,9 +44,6 @@
 			$message = "Please click the activation link below to activate your account.\n".
 						'http://localhost/192/index.php/main/activate/'.$activationKey;
 			
-			//$this->load->model('users');
-			//$user = $this->users->findwithkey($activationKey;)
-			
 			$subject = 'ExQuest Activation Key';
 			$this->sendMail($email,$message,$subject);
 			
@@ -93,11 +90,10 @@
 			  at wala pang info about sa kanya*/
 			if($user['lname'] == ''){
 				redirect('/reg/');
-			}else{ //
+			} else{ //
 				echo 'Account successfully activated. Try logging in from the '.anchor('/main/', 'homepage.');
+				$this->session->sess_destroy();
 			}
-			
-			
 		}
 	}
 ?>
