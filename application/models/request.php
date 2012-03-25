@@ -71,5 +71,36 @@ class Request extends CI_Model{
 		return $query->row();
 		
 	}
+	
+	function fromTo($status,$date1,$date2){
+		/*$query = $this->db->query("SELECT refnum, particulars, quantity, price from 
+			particulars WHERE refnum IN
+			(SELECT refnum FROM request WHERE status = '$status' AND 
+			(date BETWEEN '$date1' AND '$date2'))");
+		  return $query;*/
+		if($status == 'All') {
+			$query = $this->db->query("SELECT particulars.*,date,lname,fname,status
+				 FROM particulars,request,users
+				 WHERE (date BETWEEN '$date1' AND '$date2')
+				 AND particulars.refnum = request.refnum AND request.userid = users.id");
+		} else {
+			$query = $this->db->query("SELECT particulars.*,date,lname,fname
+					 FROM particulars,request,users
+					 WHERE status='$status' AND (date BETWEEN '$date1' AND '$date2')
+					 AND particulars.refnum = request.refnum AND request.userid = users.id");
+		}
+		return $query;
+			/*$sum = 0;
+		foreach ($query->result_array() as $row){
+			$total = $row['price']*$row['quantity'];
+			$sum = $sum+$total;
+			echo $row['refnum'].' '.$row['particulars'].' '.$row['quantity'].' '.$row['price'].' '.$total.'<br/>';	
+		}
+		echo $sum;*/
+	}
+	
+	function getSum(){
+		
+	}
 }
 ?>

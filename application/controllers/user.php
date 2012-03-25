@@ -4,7 +4,7 @@ class User extends CI_Controller {
 		if($id = $this->session->userdata('id')) {
 			$user = $this->session->all_userdata();
 			
-			echo "<h2>Hello, ".$user['fname']." ".$user['lname']."!</h2><br />";
+			//echo "<h2>Hello, ".$user['fname']." ".$user['lname']."!</h2><br />";
 			
 			$this->load->model('users');
 			
@@ -24,8 +24,13 @@ class User extends CI_Controller {
 				
 				$this->load->view('admin_view', $data);
 			} else {
-				echo "You are a regular user.<br />".anchor('/user/logout', 'Logout');
-				//$this->load->view('regular_view');
+				//echo "You are a regular user.<br />".anchor('/user/logout', 'Logout');
+				
+				$data['t1'] = $this->users->getPending($user);
+				$data['t2'] = $this->users->getApproved($user);
+				$data['t3'] = $this->users->getDisapproved($user);
+				
+				$this->load->view('regular_view', $data);
 			}
 		} else {
 			redirect('/main/');
@@ -48,14 +53,21 @@ class User extends CI_Controller {
 		//user name, tl name, app name
 		$this->load->model('users');
 		$urow = $this->users->userRow($row['userid']);
-		$u = $urow->result();
-		//echo $u->lname;
+		$u = $urow->row_array();
+		$data['uname'] = $u['lname'].", ".$u['fname'];
+		$trow = $this->users->userRow($row['teamid']);
+		$t = $trow->row_array();
+		$data['tname'] = $t['lname'].", ".$t['fname'];
+		$arow = $this->users->userRow($row['appid']);
+		$a = $arow->row_array();
+		$data['aname'] = $a['lname'].", ".$a['fname'];
 		
 		$data['ptable'] = $this->users->getPartTable($refnum);
+		$data['total'] = $this->users->getTotal($refnum);
 		
 		if($user['isAdmin'] == 1 || $user['id'] == $data['userid'] || 
 			$user['id'] == $data['teamid'] || $user['id'] == $data['appid']) {
-			//$this->load->view('refnum_view', $data);
+			$this->load->view('refnum_view', $data);
 		} else {
 			redirect("/main/");
 		}

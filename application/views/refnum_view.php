@@ -63,9 +63,24 @@ window.onload=function(){
 
 <div id="requestview">
 	Reference Number: <?=$refnum?> <br />
-	Name: <?=$username?> <br />
+	Name: <?=$uname?> <br />
 	Date Created: <?=$date?> <br />
+	Type: <?=$type?> <br />
+	Status: <?=$status?> <br />
 	
+	<?=$ptable?>
+	
+	Total Amount: <?=$total?> <br /><br />
+	
+	<?php
+	//meron dapat if-statement to kung kelangan pa ng approval o hindi, kung hindi na, hindi na dapat
+	//lumalabas yung form 
+		form_open("/user/checkApproval");
+		echo form_submit('approve', 'Approve');
+		echo form_submit('disapprove', 'Disapprove');
+		echo form_submit('home', 'Back to Home');
+		form_close();
+	?>
 </div>
 
 </body>

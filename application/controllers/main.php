@@ -179,5 +179,57 @@
 		echo 'Request submitted';
 		
 		}
+		
+	function report(){
+			$data['types'] = array(
+				  'All'  => 'All',
+                  'Approved'  => 'Approved',
+                  'Disapproved'=> 'Disapproved',
+				  'Pending'=>'Pending'
+                );
+			$this->load->view('report',$data);
+		}
+		
+		function generate(){
+			$stat = $_POST['type'];
+			$date1 = $_POST['from'];
+			$date2 = $_POST['to'];
+			$month1 = substr($date1,0,-8);
+			$day1 = substr($date1,3,-5);
+			$year1 = substr($date1,6);
+			$month2 = substr($date2,0,-8);
+			$day2 = substr($date2,3,-5);
+			$year2 = substr($date2,6);
+			$from = $year1.'-'.$month1.'-'.$day1;
+			$to = $year2.'-'.$month2.'-'.$day2;
+			$this->viewreport($stat,$from,$to,$date1,$date2);
+			//echo $from.'<br/>';
+			//echo $to.'<br/>';
+			
+		}
+		
+		function viewreport($stat,$from,$to,$date1,$date2){
+			
+			$this->load->model('request');
+			$data['query'] = $this->request->fromTo($stat,$from,$to);
+			$data['type'] = $stat;
+			$data['from'] = $date1;
+			$data['to'] = $date2;
+			
+			/*$this->load->library('pagination');
+			$config['base_url'] = base_url().'index.php/main/viewreport/';
+			$config['total_rows'] = $this->db->get('particulars')->num_rows();
+			$config['per_page'] = 5;
+			$config['full_tag_open'] = '<p>';
+			$config['full_tag_close'] = '</p>';
+
+			$this->pagination->initialize($config);*/
+			
+			//echo $this->pagination->create_links();
+			//$data['query'] = $this->request->fromTo($stat,$from,$to,$config['per_page'],$this->uri->segment(3));
+			
+			//$data['query']=$query;
+			$this->load->view('result',$data);
+		}
 	}
 ?>

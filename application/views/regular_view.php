@@ -48,15 +48,9 @@ window.onload=function(){
  <h1></h1>
   <ul>
     <li class="on"><a href="main.php" >Home</a> </li>
-     <li ><?=anchor('/accounts/', 'Account')?>
-	 <ul>
-		<li><?=anchor('/accounts/', 'User')?>
-		<li class=\"contact\"><?=anchor('/company/', 'Company')?></li>
-	</ul>
+     <li ><a href="account.php">Account</a>
 	 </li>
-	 <li><a href=\"adduser.php\" >Add User</a></li>
-	<li><?=anchor('/main/report', 'View Reports')?></li>
-     <li class="contact"><?=anchor('/main/logout', 'Sign Out')?></li>
+     <li class="contact"><a href="/192/index.php/user/logout">Sign Out</a></li>
   </ul>
   </div>
 </div>

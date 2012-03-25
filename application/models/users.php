@@ -57,9 +57,15 @@ class Users extends CI_Model {
 		$this->db->where('request.cid', $user['cid']);
 		$this->db->where('status', 'Pending');
 		if($user['isAdmin'] == 0) {
-			if($user['isLeader'] == 1) $this->db->where('teamid', $user['id']);
-			if($user['isOfficer'] == 1) $this->db->where('appid', $user['id']);
-			$this->db->or_where('userid', $user['id']);
+			$this->db->where('userid', $user['id']);
+			if($user['isLeader'] == 1) {
+				$this->db->or_where('teamid', $user['id']);
+				$this->db->where('status', 'Disapproved');
+			}
+			if($user['isOfficer'] == 1) {
+				$this->db->or_where('appid', $user['id']);
+				$this->db->where('status', 'Disapproved');
+			}
 		}
 		$this->db->order_by('refnum', 'desc');
 		
@@ -101,9 +107,15 @@ class Users extends CI_Model {
 		$this->db->where('request.cid', $user['cid']);
 		$this->db->where('status', 'Approved');
 		if($user['isAdmin'] == 0) {
-			if($user['isLeader'] == 1) $this->db->where('teamid', $user['id']);
-			if($user['isOfficer'] == 1) $this->db->where('appid', $user['id']);
-			$this->db->or_where('userid', $user['id']);
+			$this->db->where('userid', $user['id']);
+			if($user['isLeader'] == 1) {
+				$this->db->or_where('teamid', $user['id']);
+				$this->db->where('status', 'Disapproved');
+			}
+			if($user['isOfficer'] == 1) {
+				$this->db->or_where('appid', $user['id']);
+				$this->db->where('status', 'Disapproved');
+			}
 		}
 		$this->db->order_by('refnum', 'desc');
 		
@@ -128,9 +140,15 @@ class Users extends CI_Model {
 		$this->db->where('request.cid', $user['cid']);
 		$this->db->where('status', 'Disapproved');
 		if($user['isAdmin'] == 0) {
-			if($user['isLeader'] == 1) $this->db->where('teamid', $user['id']);
-			if($user['isOfficer'] == 1) $this->db->where('appid', $user['id']);
-			$this->db->or_where('userid', $user['id']);
+			$this->db->where('userid', $user['id']);
+			if($user['isLeader'] == 1) {
+				$this->db->or_where('teamid', $user['id']);
+				$this->db->where('status', 'Disapproved');
+			}
+			if($user['isOfficer'] == 1) {
+				$this->db->or_where('appid', $user['id']);
+				$this->db->where('status', 'Disapproved');
+			}
 		}
 		$this->db->order_by('refnum', 'desc');
 		
@@ -159,13 +177,12 @@ class Users extends CI_Model {
 	function getPartTable($refnum) {
 		$query = $this->getPart($refnum);
 		
-		$tmpl =  array ( 'table_open'  => '<table cellpadding="2" class="altrowstable" id="alternatecolor2">' );
+		$tmpl =  array ( 'table_open'  => '<table cellpadding="2" class="altrowstable" id="alternatecolor">' );
 		$this->table->set_template($tmpl);
 		
 		$this->table->set_heading('Particulars', 'Quantity', 'Price', 'Total Amount');
 		
 		foreach($query->result() as $row) {
-			$total = $this->getTotal($refnum);
 			$this->table->add_row($row->particulars, $row->quantity, $row->price, $row->quantity*$row->price);
 		}
 		
@@ -176,7 +193,7 @@ class Users extends CI_Model {
 		$query = $this->getPart($refnum);
 		$total = 0;
 		foreach($query->result() as $row) {
-			$total = $row->price * $row->quantity;
+			$total = $total + $row->price * $row->quantity;
 		}
 		return $total;
 	}

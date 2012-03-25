@@ -4,39 +4,54 @@ class Accounts extends CI_Controller{
 		parent::_construct();
 	}
 
-	function index()
-	{
-		$this->register();	
+	function index(){
+		$this->usersettings();
 	}
 	
-	function register(){
+	function usersettings()
+	{
+		$this->passcheck('hello');
 		$this->load->library('form_validation');
-
 		$this->form_validation->set_error_delimiters('<b class="error">', '</b>');
 		$this->form_validation->set_rules('lname','Last Name','required|trim');
 		$this->form_validation->set_rules('fname','First Name','required|trim');
-		$this->form_validation->set_rules('password','Password','required|trum');
+		$this->form_validation->set_rules('oldpassword','Current Password','required|callback_passcheck');
+		$this->form_validation->set_rules('password','New Password','required|trim');
+		$this->form_validation->set_rules('cpassword','Confirm Password','required|trim|matches[password]');
 		$this->form_validation->set_message('required','%s is required');
 		$this->form_validation->set_message('matches','Passwords do not match. Retype password.');
-		$this->form_validation->set_rules('lname', 'Last Name', 'callback_show');			
-		
+
+		$id = $this->session->userdata('id');		
+//		$id = '5';
 		if($this->form_validation->run() == TRUE){
-			$this->load->model('edituser');
-			$this->edituser->adduser();
+			$this->load->model('editsettings');
+			$this->editsettings->edituser($id);	
+//			$this->session->sess_destroy();			
+			echo "Changes saved. ".anchor('/main/','Back to Home');	
+			//paconnect nalang sa home
 		}else{
-			$this->load->view('reg1');
+			$this->db->select('*');
+			//$this->db->from('users');
+			$this->db->where('id', $id);	
+			//$data = array();
+			$data = $this->db->get('users')->row_array();
+			
+			$this->load->view('edit1', $data); 			
 		}
 	}
 	
-	function updateuser(){
-		$this->load->database();
-		$data = array(
-					'lname' => $this->input->post('lname'),
-					'fname' => $this->input->post('fname'),
-					'email' => $this->input->post('email'),
-					'password' => $this->input->post('password')	
-					);
-
-		$this->db->update('user', $data);
+	function passcheck($password) {
+		$this->load->library('form_validation');
+		$id = $this->session->userdata('id');
+		$this->db->select('*');
+		$this->db->where('id', $id);
+		$data = $this->db->get('users')->row_array();
+		
+		$data['password'] = $this->encrypt->decode($data['password']);
+		if($password == $data['password']) return TRUE;
+		else {
+			$this->form_validation->set_message('passcheck', 'Incorrect Password');
+			return FALSE;
+		}
 	}
 }
