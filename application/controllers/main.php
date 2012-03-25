@@ -44,8 +44,8 @@
 			$message = "Please click the activation link below to activate your account.\n".
 						'http://localhost/192/index.php/main/activate/'.$activationKey;
 			
-			$this->load->model('users');
-			
+			//$this->load->model('users');
+			//$user = $this->users->findwithkey($activationKey;)
 			
 			$subject = 'ExQuest Activation Key';
 			$this->sendMail($email,$message,$subject);
