@@ -47,7 +47,7 @@ window.onload=function(){
   <a href="index.html"><img src="/192/images/logo.gif" alt="ExQuest" title="ExQuest" border="0" /></a>
  <h1></h1>
   <ul>
-    <li class="on"><a href="main.php" >Home</a> </li>
+    <li class="on"><a href="/192/" >Home</a> </li>
      <li ><a href="account.php">Account</a>
 	 <ul>
 		<li><a href=\"account.php\">User</a></li>
@@ -61,53 +61,12 @@ window.onload=function(){
   </div>
 </div>
 
-	<div id="reqPan">
-		<br />
-		<?=form_open('/main/request/')?>
-			<input class="botton" type="submit" value="Create Request" name="create" />
-		</form>
-		<br />
-		<br />
-		<br />
-		
-		<h2>Pending Requests</h2>
-		
-		<?=$t1?>
-		 
-		<br />
-		<h2 ><font color="#99CCFF">Your Approved Requests</font></h2>
-		
-		<?=$t2?>
-		
-		<br />
-		<h2 ><font color="#FF9999">Your Disapproved Requests</font></h2>
-		
-		<?=$t3?>
-		
-		<br />
-		<br />
-		<br />
-	</div>
-
-<!--FOOTER-->
-<div id="footermainPan">
-  <div id="footerPan">
-  	<div id="footerlogoPan"><a href="index.html"><img src="/192/images/footerlogo.gif" title="ExQuest" alt="ExQuest" width="180" height="36" border="0" /></a></div>
-	<ul>
-  	<li><a href="main.php">Home</a>| </li>
-  	<li><a href="faqs_logged.php">FAQs</a> | </li>
-	<li><a href="contact_logged.php">Contact Us</a> </li>
-	</ul>
-	<p class="copyright">©exquest2012. All rights reserved.</p>
-	<ul class="templateworld">
-  	<li>design by:</li>
-	<li><a href="http://www.templateworld.com" target="_blank">Template World</a></li>
-  </ul>
-   <div id="footerPanhtml"><a href="http://validator.w3.org/check?uri=referer" target="_blank">XHTML</a></div>
-   <div id="footerPancss"><a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank">css</a></div>
- 
-  </div>
+<div id="requestview">
+	Reference Number: <?=$refnum?> <br />
+	Name: <?=$username?> <br />
+	Date Created: <?=$date?> <br />
+	
 </div>
+
 </body>
 </html>
-

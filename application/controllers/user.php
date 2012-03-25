@@ -16,18 +16,11 @@ class User extends CI_Controller {
 			
 			if($user['isAdmin'] == 1) {
 				//echo "You are an admin.<br />".anchor('/user/logout', 'Logout');
-				//$this->users->getTable('requests');
-				$this->load->library('table');
+				$this->users->getPending('requests');
 				
-				$tmpl =  array ( 'table_open'  => '<table cellpadding="2" class="altrowstable" id="alternatecolor">' );
-				$this->table->set_template($tmpl);
-				$this->table->set_heading('Name', 'Color', 'Size');
-				
-				$this->table->add_row('Fred', 'Blue', 'Small');
-				$this->table->add_row('Mary', 'Red', 'Large');
-				$this->table->add_row('John', 'Green', 'Medium');
-				
-				$data['t1'] = $this->table->generate('alternatecolor');
+				$data['t1'] = $this->users->getPending($user);
+				$data['t2'] = $this->users->getApproved($user);
+				$data['t3'] = $this->users->getDisapproved($user);
 				
 				$this->load->view('admin_view', $data);
 			} else {
@@ -36,6 +29,35 @@ class User extends CI_Controller {
 			}
 		} else {
 			redirect('/main/');
+		}
+	}
+	function view($refnum) {
+		$user = $this->session->all_userdata();
+		$this->db->select('*');
+		$this->db->from('request');
+		$this->db->where('cid', $user['cid']);
+		$this->db->where('refnum', $refnum);
+		$query = $this->db->get();
+		$row = $query->row_array();
+		
+		$data['refnum'] = $refnum;
+		$data['date'] = $row['date'];
+		$data['type'] = $row['type'];
+		$data['status'] = $row['status'];
+		
+		//user name, tl name, app name
+		$this->load->model('users');
+		$urow = $this->users->userRow($row['userid']);
+		$u = $urow->result();
+		//echo $u->lname;
+		
+		$data['ptable'] = $this->users->getPartTable($refnum);
+		
+		if($user['isAdmin'] == 1 || $user['id'] == $data['userid'] || 
+			$user['id'] == $data['teamid'] || $user['id'] == $data['appid']) {
+			//$this->load->view('refnum_view', $data);
+		} else {
+			redirect("/main/");
 		}
 	}
 	function logout() {
