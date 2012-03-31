@@ -1,1 +1,1 @@
-<html><head>	<link rel="stylesheet" type="text/css" href="<?=$css?>" />	<title><?=$title?></title></head><body>	<h1>ExQuest | Register</h1>	<h3>Activation Successful.</h3>	<?=anchor('reg/step1', 'Start Registration')?></body></html>
+	<h2>Activation Successful</h2>	<?=form_open('/reg/step1')?>	<?=form_submit('', 'Register', 'style="float:center;" class="botton"')?><br /><br />

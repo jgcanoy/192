@@ -22,22 +22,27 @@ class Accounts extends CI_Controller{
 		$this->form_validation->set_message('matches','Passwords do not match. Retype password.');
 
 		$id = $this->session->userdata('id');		
-//		$id = '5';
 		if($this->form_validation->run() == TRUE){
 			$this->load->model('editsettings');
 			$this->editsettings->edituser($id);	
-//			$this->session->sess_destroy();			
-			echo "Changes saved. ".anchor('/main/','Back to Home');	
-			//paconnect nalang sa home
+			redirect('/accounts/changesuccess');	
 		}else{
 			$this->db->select('*');
-			//$this->db->from('users');
 			$this->db->where('id', $id);	
-			//$data = array();
 			$data = $this->db->get('users')->row_array();
 			
-			$this->load->view('edit1', $data); 			
+			if($this->session->userdata('isAdmin') == 1) $this->load->view('admin_header');
+			else $this->load->view('regular_header');
+			$this->load->view('edit1', $data); 	
+			$this->load->view('footer', $data);
 		}
+	}
+	
+	function changesuccess(){
+		$this->load->view('reg_header');
+		$data['message'] = "Changing account details successful";
+		$this->load->view('message', $data);
+		$this->load->view('footer');
 	}
 	
 	function passcheck($password) {

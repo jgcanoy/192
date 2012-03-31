@@ -1,9 +1,10 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<link rel="icon" type="image/x-icon" href="/192/images/icon.png">
-	<title><?=$title?></title>
+	<link rel="icon" type="image/x-icon" href="icon.png">
+	<title>ExQuest | Advantages</title>
 <link href="/192/css/theme.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript">
     function toggle(id) {
@@ -14,15 +15,15 @@
                 document.getElementById(id).style.display = 'block';
             }
         }
-</script><!--
+</script>
+<script type="text/javascript" src="/192/js/jquery.js"></script>
 <script type="text/javascript" src="/192/js/jquery-1.4.1.min.js"></script>
-<script type="text/javascript" src="/192/js/infiniteCarousel/jquery.infinitecarousel.js"></script>
+<script type="text/javascript" src="/192/js/jquery.infinitecarousel.js"></script>
 <script type="text/javascript">
 $(function(){
 	$('#carousel').infiniteCarousel();
 });
-</script>-->
-<script type="text/javascript" src="/192/js/jquery.js"></script>
+</script>
 <script type="text/javascript">
 function fade_toggle(){
  $("#body1hidden").fadeToggle("1000");
@@ -35,45 +36,28 @@ function fade_toggle(){
 <div id="header">
 	<a href="index.html"><img src="/192/images/logo.gif" alt="ExQuest" title="ExQuest" border="0" /></a>
 	<ul>
-		<li class="on"><?=anchor('/main/index','Home')?> </li>
+		<li ><?=anchor('/main/index','Home')?> </li>
 		<li ><?=anchor('/main/index','About Us')?> </li>
-		<li ><?=anchor('/main/adv','Benefits')?> </li>
+		<li class="on"><?=anchor('/main/adv','Benefits')?> </li>
 		<li ><?=anchor('/main/faqs','FAQs')?> </li>
 		<li class="contact"><?=anchor('/main/contact','Contact Us')?> </li>
-	</ul><!--
+	</ul>
+
+	<h1></h1>
+</div>
+</div>
+<div id="bodymiddlePan">
+	<h2>ExQuest Benefits</h2>
 <div id="carousel">
 <ul>
-	<li><img alt="" src="/192/js/banner1.jpg" width="580" height="188" /></li>
+	<li><img alt="" src="/192/images/banner1.jpg" width="580" height="188" /></li>
 	<li><img alt="" src="/192/images/banner2.jpg" width="580" height="188" /></li>
 	<li><img alt="" src="/192/images/banner3.jpg" width="580" height="188" /></li>
 	<li><img alt="" src="/192/images/banner4.jpg" width="580" height="188" /></li>
 	<li><img alt="" src="/192/images/banner5.jpg" width="580" height="188" /></li>
 
 </ul>
-</div>-->
-
-	<h1></h1>
 </div>
-</div>
-<div id="body1"><?=form_open('/main/check/')?>
-	<label>User Login:</label>
-	<input name="email" type="text" value="Email address here..." onFocus="this.value=''" />
-	<input name="pass" type="password" value="Password" onFocus="this.value=''"/>
-	<input name="" type="submit" class="botton" value="GO" />
-	<a href="#" onclick="fade_toggle();"><font color="yellow">Register here. </font></a>
-</form>
-</div>
-<div id="body1hidden"><?=form_open('/main/sendKey')?>
-	<label>Register:</label>
-	<input name="email" type="text" value="Email address here..." onFocus="this.value=''"/>
-	<input name="" type="submit" class="botton" value="SUBMIT" />
-	<p class="quote">* A link will be sent to your e-mail address for activation.</p>
-</form>
-</div>
-<div id="bodymiddlePan">
-	<h2>About ExQuest</h2>
-	<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExQuest is an online expense monitoring system designed to track down all expenses made by a company or organization. It will allow companies and organizations to conveniently make requests and approve expense requests just by accessing the Internet.</p><br />
-	<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For inquiries and help, <a href="contact.php"><font color="white">contact us</font></a></p>
 </div>
 <div id="bodyBottomPan">
   <div id="infoPan">

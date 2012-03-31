@@ -9,7 +9,9 @@ class Reg extends CI_Controller{
 		$data['title'] = "ExQuest | Register";
 		$data['css'] = base_url()."/css/theme.css";
 		
+		$this->load->view('reg_header', $data);
 		$this->load->view('reg_start', $data);
+		$this->load->view('footer', $data);
 		
 	}
 	
@@ -19,9 +21,6 @@ class Reg extends CI_Controller{
 		$this->form_validation->set_rules('lname','Last Name','required|trim');
 		$this->form_validation->set_rules('fname','First Name','required|trim');
 		
-		//$this->form_validation->set_rules('mname','Middle Name','required|trim');
-		//$this->form_validation->set_rules('contact','Contact','required|numeric');
-		//$this->form_validation->set_rules('email','Email','required|valid_email');
 		$this->form_validation->set_rules('pass','Password','required|trum');
 		$this->form_validation->set_rules('pass2','Confirm Password','required|trim|matches[pass]');
 		$this->form_validation->set_message('required','%s is required');
@@ -29,7 +28,9 @@ class Reg extends CI_Controller{
 	
 		
 		if($this->form_validation->run() == FALSE){
+			$this->load->view('reg_header');
 			$this->load->view('s1');
+			$this->load->view('footer');
 		}else{
 			$this->load->model('ems_model');
 			$id = $this->session->userdata('id');
@@ -44,14 +45,13 @@ class Reg extends CI_Controller{
 		$this->form_validation->set_error_delimiters('<b class="error">', '</b>');
 		$this->form_validation->set_rules('cname','Company Name','required|trim');
 		$this->form_validation->set_rules('cemail','Company Email','required|valid_email');
-		//$this->form_validation->set_rules('caddr','Company Address','required|trim');
-		//$this->form_validation->set_rules('ccontact','Company Numer','required');
 		
 		$this->form_validation->set_message('required','%s is required');
 		
 		if($this->form_validation->run() == FALSE){
+			$this->load->view('reg_header');
 			$this->load->view('s2');
-			
+			$this->load->view('footer');
 		}else{
 			$this->load->model('ems_model');
 			$this->load->model('users');
@@ -72,16 +72,20 @@ class Reg extends CI_Controller{
 		$this->form_validation->set_rules('lname','Last Name','required|trim');
 		$this->form_validation->set_rules('fname','First Name','required|trim');
 		$this->form_validation->set_rules('email','Email','required|valid_email');
-		//$this->form_validation->set_rules('mname','Middle Name','required|trim');
-		//$this->form_validation->set_rules('contact','Contact','required|numeric');
-		//$this->form_validation->set_rules('email','Email','required|valid_email');
 		$this->form_validation->set_rules('pass','Password','required|trum');
 		$this->form_validation->set_rules('pass2','Confirm Password','required|trim|matches[pass]');
 		$this->form_validation->set_message('required','%s is required');
 		$this->form_validation->set_message('matches','Passwords do not match. Retype password.');
 		
 		if($this->form_validation->run() == FALSE){
+			$this->load->view('reg_header');
 			$this->load->view('s3');
+			$this->load->view('footer');
+			echo $this->input->post('submit');
+			if($this->input->post('submit') == 'Skip'){
+				$this->session->sess_destroy();
+				redirect('reg/regsuccess');
+			}
 		}else{
 			$action = $this->input->post('submit');	
 			if($action == 'Add More Users'){
@@ -90,11 +94,19 @@ class Reg extends CI_Controller{
 			}else if($action == 'Next'){
 				$this->add();
 				$this->session->sess_destroy();
-				echo "Registration was successful. ".anchor('/main/','Back to Home');
-				//redirect('/main/');
-				
+				//$this->load->view('reg_header');
+				//echo "<h2>Registration was successful.<h2> ".anchor('/main/','Back to Home');
+				//$this->load->view('footer');
+				redirect('reg/regsuccess');
 			}		
 		}
+	}
+	
+	function regsuccess() {
+		$this->load->view('reg_header');
+		$data['message'] = "Registration Successful.";
+		$this->load->view('message', $data);
+		$this->load->view('footer');
 	}
 	
 	function add(){
@@ -117,7 +129,7 @@ class Reg extends CI_Controller{
 		$this->load->model('users');
 		$user = $this->users->findwithkey($activationKey);
 			
-		$message = $message."\n\nUsername: ".$user['email']."\nTemporary Password: ".$user['password'].;
+		$message = $message."\n\nUsername: ".$user['email']."\nTemporary Password: ".$user['password'];
 		
 		$this->load->helper('email');
 			$emailConfig = array(
@@ -141,6 +153,49 @@ class Reg extends CI_Controller{
 			show_error($this->email->print_debugger());
 		}	
 	}
-}
+	
+	function addUser(){
+	$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('<b class="error">', '</b>');
+		$this->form_validation->set_rules('lname','Last Name','required|trim');
+		$this->form_validation->set_rules('fname','First Name','required|trim');
+		$this->form_validation->set_rules('email','Email','required|valid_email');
+		//$this->form_validation->set_rules('mname','Middle Name','required|trim');
+		//$this->form_validation->set_rules('contact','Contact','required|numeric');
+		//$this->form_validation->set_rules('email','Email','required|valid_email');
+		$this->form_validation->set_rules('pass','Password','required|trum');
+		$this->form_validation->set_rules('pass2','Confirm Password','required|trim|matches[pass]');
+		$this->form_validation->set_message('required','%s is required');
+		$this->form_validation->set_message('matches','Passwords do not match. Retype password.');
+		
+		if($this->form_validation->run() == FALSE){
+			if($this->session->userdata('isAdmin') == 1) {
+				$this->load->view('admin_header');
+				$this->load->view('add');
+				$this->load->view('footer');
+			} else redirect('/main');
+			if($this->input->post('submit') == 'Done'){
+				redirect('/user/');
+			}
+		} else {
+			$action = $this->input->post('submit');	
+			if($action == 'Add More Users'){
+				$this->add();
+				redirect('/reg/addUser');		
+			} elseif($action == 'Done'){
+				$this->add();
+				redirect('/reg/addsuccess');
+			}
+		}
+	}
+	
+	function addsuccess() {
+		$this->load->view('reg_header');
+		$data['message'] = "User added successfully";
+		$this->load->view('message', $data);
+		$this->load->view('footer');
+	}
+	}
+
 
 ?>

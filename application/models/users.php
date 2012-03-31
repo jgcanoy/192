@@ -60,11 +60,11 @@ class Users extends CI_Model {
 			$this->db->where('userid', $user['id']);
 			if($user['isLeader'] == 1) {
 				$this->db->or_where('teamid', $user['id']);
-				$this->db->where('status', 'Disapproved');
+				$this->db->where('status', 'Pending');
 			}
 			if($user['isOfficer'] == 1) {
 				$this->db->or_where('appid', $user['id']);
-				$this->db->where('status', 'Disapproved');
+				$this->db->where('status', 'Pending');
 			}
 		}
 		$this->db->order_by('refnum', 'desc');
@@ -73,22 +73,34 @@ class Users extends CI_Model {
 		
 		if($user['isLeader'] == 0 && $user['isOfficer'] == 0) {
 			$this->table->set_heading('Ref. No.', 'Date', 'Name', 'Type', 'Total Amount');
+			$cell = array('data' => '<i>No data to display</i>', 'colspan' => 5);
+			if($query->num_rows == 0) $this->table->add_row($cell);
 			foreach($query->result() as $row) {
 				$total = $this->getTotal($row->refnum);
 				$this->table->add_row(anchor('user/view/'.$row->refnum,$row->refnum), $row->date, $row->fname." ".$row->lname, $row->type, $total);
 			}
 		} else {
 			$this->table->set_heading('Ref. No.', 'Date', 'Name', 'Type', 'Total Amount', 'Status');
+			$cell = array('data' => '<i>No data to display</i>', 'colspan' => 6);
+			if($query->num_rows == 0) $this->table->add_row($cell); 
 			foreach($query->result() as $row) {
 				$total = $this->getTotal($row->refnum);
 				$status = '';
-				if($user['isLeader'] == 1) {
-					if($row->teamid == $user['id']) $status = "<input type=\"button\" class=\"chkbtn\" name=\"approve\" onClick=\"\">
-					<input type=\"button\" class=\"crsbtn\" name=\"disapprove\" onClick=\"\">";
+				if($user['isLeader'] == 1 && $row->teamapprove == 2) {
+					if($row->teamid == $user['id']) 
+						$status = 
+						form_open('/user/checkApproval/'.$row->refnum).
+						"<input type=\"submit\" class=\"chkbtn\" name=\"t_approve\" value=\"Approve\">\n
+						<input type=\"submit\" class=\"crsbtn\" name=\"t_disapprove\" value=\"Disapprove\">\n
+						</form>";
 				}
-				if($user['isOfficer'] == 1) {
-					if($row->appid == $user['id']) $status = "<input type=\"button\" class=\"chkbtn\" name=\"approve\" onClick=\"\">
-					<input type=\"button\" class=\"crsbtn\" name=\"disapprove\" onClick=\"\">";
+				//echo $user['id']." ".$row->teamapprove." ".$row->appoffapprove;
+				if($user['isOfficer'] == 1 && $row->teamapprove == 1 && $row->appoffapprove == 2) {
+					if($row->appid == $user['id']) $status = 
+						form_open('/user/checkApproval/'.$row->refnum).
+						"<input type=\"submit\" class=\"chkbtn\" name=\"a_approve\" value=\"Approve\">\n
+						<input type=\"submit\" class=\"crsbtn\" name=\"a_disapprove\" value=\"Disapprove\">\n
+						</form>";
 				}
 				$this->table->add_row(anchor('user/view/'.$row->refnum,$row->refnum), $row->date, $row->fname." ".$row->lname, $row->type, $total, $status);
 			}
@@ -110,11 +122,11 @@ class Users extends CI_Model {
 			$this->db->where('userid', $user['id']);
 			if($user['isLeader'] == 1) {
 				$this->db->or_where('teamid', $user['id']);
-				$this->db->where('status', 'Disapproved');
+				$this->db->where('status', 'Approved');
 			}
 			if($user['isOfficer'] == 1) {
 				$this->db->or_where('appid', $user['id']);
-				$this->db->where('status', 'Disapproved');
+				$this->db->where('status', 'Approved');
 			}
 		}
 		$this->db->order_by('refnum', 'desc');
@@ -122,6 +134,8 @@ class Users extends CI_Model {
 		$query = $this->db->get();
 		
 		$this->table->set_heading('Ref. No.', 'Date', 'Name', 'Type', 'Total Amount');
+		$cell = array('data' => '<i>No data to display</i>', 'colspan' => 5);
+		if($query->num_rows == 0) $this->table->add_row($cell); 
 		foreach($query->result() as $row) {
 			$total = $this->getTotal($row->refnum);
 			$this->table->add_row(anchor('user/view/'.$row->refnum,$row->refnum), $row->date, $row->fname." ".$row->lname, $row->type, $total);
@@ -154,9 +168,9 @@ class Users extends CI_Model {
 		
 		$query = $this->db->get();
 		
-		echo $query->num_rows();
-		
 		$this->table->set_heading('Ref. No.', 'Date', 'Name', 'Type', 'Total Amount');
+		$cell = array('data' => '<i>No data to display</i>', 'colspan' => 5);
+		if($query->num_rows == 0) $this->table->add_row($cell);
 		foreach($query->result() as $row) {
 			$total = $this->getTotal($row->refnum);
 			$this->table->add_row(anchor('user/view/'.$row->refnum,$row->refnum), $row->date, $row->fname." ".$row->lname, $row->type, $total);
@@ -196,6 +210,18 @@ class Users extends CI_Model {
 			$total = $total + $row->price * $row->quantity;
 		}
 		return $total;
+	}
+	function getUsers($cid){
+		$tmpl =  array ( 'table_open'  => '<table cellpadding="2" class="altrowstable" id="alternatecolor">' );
+		$this->table->set_template($tmpl);
+		$this->table->set_heading('Name', 'Email', '');
+		$query = $this->db->query("SELECT id,fname, lname, email from users WHERE cid = $cid");
+		foreach($query->result() as $row) {
+			//$total = $this->getTotal($row->refnum);
+			$this->table->add_row($row->fname." ".$row->lname, $row->email, anchor('user/delete/'.$row->id,'DELETE'));
+		}
+			
+		return $this->table->generate();		
 	}
 }
 ?>

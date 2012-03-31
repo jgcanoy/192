@@ -27,7 +27,6 @@ class Request extends CI_Model{
 				echo $row->fname.' '.$row->lname;
 				echo $row->id;
 				echo "<br />";
-				
 			}
 		} */
 		
@@ -82,12 +81,12 @@ class Request extends CI_Model{
 			$query = $this->db->query("SELECT particulars.*,date,lname,fname,status
 				 FROM particulars,request,users
 				 WHERE (date BETWEEN '$date1' AND '$date2')
-				 AND particulars.refnum = request.refnum AND request.userid = users.id");
+				 AND particulars.refnum = request.refnum AND request.userid = users.id AND users.cid = request.cid");
 		} else {
 			$query = $this->db->query("SELECT particulars.*,date,lname,fname
 					 FROM particulars,request,users
 					 WHERE status='$status' AND (date BETWEEN '$date1' AND '$date2')
-					 AND particulars.refnum = request.refnum AND request.userid = users.id");
+					 AND particulars.refnum = request.refnum AND request.userid = users.id AND users.cid = request.cid");
 		}
 		return $query;
 			/*$sum = 0;

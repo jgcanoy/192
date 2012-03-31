@@ -14,14 +14,16 @@ width:16px;
 height:15px;  
 background:url(/192/images/check.png) 0 0 no-repeat #3A3A3A; 
 border:none; 
-color:#fff; 
+color:#fff;
+font-size: 0px;
 }
 .chkbtn:hover{
 width:16px; 
 height:15px; 
 background:url(/192/images/checkhover.png) 0 0 no-repeat #3A3A3A; 
 border:none; 
-color:#fff; 
+color:#fff;
+font-size: 0px;
 }
 
 .crsbtn{
@@ -29,7 +31,8 @@ width:16px;
 height:15px; 
 background:url(/192/images/cross.png) 0 0 no-repeat #3A3A3A; 
 border:none; 
-color:#fff; 
+color:#fff;
+font-size: 0px;
 }
 
 .crsbtn:hover{
@@ -37,7 +40,8 @@ width:16px;
 height:15px; 
 background:url(/192/images/crosshover.png) 0 0 no-repeat #3A3A3A; 
 border:none; 
-color:#fff; 
+color:#fff;
+font-size:0px;
 }
 
 /*----TOP PANEL----*/
@@ -81,6 +85,10 @@ background:url(/192/images/ul.gif) 0 0 no-repeat;
 position:absolute; 
 left:-3000px; 
 background: transparent;
+}
+
+.addu {
+	margin-top: 30px;
 }
 
 #header ul li{
@@ -307,7 +315,6 @@ font-weight:normal;
 width:725px; 
 position:relative; 
 margin:0 auto; 
-padding:0 88px; 
 clear:both;
 }
 
@@ -380,6 +387,7 @@ table.altrowstable {
 	font-family: verdana,arial,sans-serif;
 	font-size:11px;
 	color: #333333;
+	text-align: center;
 	border-collapse: collapse;
 }
 table.altrowstable th {

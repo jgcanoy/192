@@ -22,8 +22,7 @@
 				redirect('/user/');
 			}
 			else {
-				echo "Login Failed. ";
-				echo anchor('/', 'Back to Home');
+				redirect('/main/');
 			}
 		}
 		function sendsuccess() {
@@ -71,7 +70,7 @@
 				show_error($this->email->print_debugger());
 			}else {
 			// Show success notification or other things here
-				echo 'Success to send email';	
+//				echo 'Success to send email';	
 			} 
 		}
 		
@@ -88,7 +87,9 @@
 			if($user['lname'] == ''){
 				redirect('/reg/');
 			} else{ //
-				echo 'Account successfully activated. Try logging in from the '.anchor('/main/', 'homepage.');
+				$this->load->view('reg_header');
+				echo '<h2>Account successfully activated. Try logging in from the '.anchor('/main/', 'homepage.')."</h2>";
+				$this->load->view('footer');
 				$this->session->sess_destroy();
 			}
 		}
@@ -125,7 +126,10 @@
 			$this->Ems_model->add_request();
 			echo 'Request submitted';
 		}	*/
+			if($this->session->userdata('isAdmin') == 1) $this->load->view('admin_header');
+			else $this->load->view('regular_header', $data);
 			$this->load->view('create',$data);
+			$this->load->view('footer');
 		}
 		
 		/* generate reference number */
@@ -176,18 +180,22 @@
 					
 		$this->sendMail($email,$message,$subject);
 		//display success message
-		echo 'Request submitted';
+		echo 'Request submitted '.anchor('/user/', 'Back to Home');
 		
 		}
 		
-	function report(){
+		function report(){
 			$data['types'] = array(
 				  'All'  => 'All',
                   'Approved'  => 'Approved',
                   'Disapproved'=> 'Disapproved',
 				  'Pending'=>'Pending'
                 );
-			$this->load->view('report',$data);
+			if($this->session->userdata('isAdmin') == 1) {
+				$this->load->view('report_header');
+			    $this->load->view('report',$data);
+				$this->load->view('footer', $data);
+			} else redirect('/main');		
 		}
 		
 		function generate(){
@@ -216,20 +224,35 @@
 			$data['from'] = $date1;
 			$data['to'] = $date2;
 			
-			/*$this->load->library('pagination');
-			$config['base_url'] = base_url().'index.php/main/viewreport/';
-			$config['total_rows'] = $this->db->get('particulars')->num_rows();
-			$config['per_page'] = 5;
-			$config['full_tag_open'] = '<p>';
-			$config['full_tag_close'] = '</p>';
-
-			$this->pagination->initialize($config);*/
-			
-			//echo $this->pagination->create_links();
-			//$data['query'] = $this->request->fromTo($stat,$from,$to,$config['per_page'],$this->uri->segment(3));
-			
-			//$data['query']=$query;
-			$this->load->view('result',$data);
+			if($this->session->userdata('isAdmin') == 1) {
+				$this->load->view('admin_header');
+				$this->load->view('result',$data);
+				$this->load->view('footer', $data);
+			} else redirect('/main');	
 		}
+		function edit(){
+			$cid = $this->session->userdata('cid');
+			$this->load->model('users');
+			$data['t1'] = $this->users->getUsers($cid);
+			if($this->session->userdata('isAdmin') == 1) {
+				$this->load->view('admin_header');
+				$this->load->view('edit_view',$data);
+				$this->load->view('footer');
+			} else redirect('/main');
+		}
+		
+		
+	
+	function faqs(){
+		$this->load->view('faqs');
+	}
+	function contact(){
+		$this->load->view('contact');
+	}
+	function adv(){
+		$this->load->view('new');
+	}
+		
+						
 	}
 ?>

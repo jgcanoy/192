@@ -9,11 +9,8 @@ class Editsettings extends CI_Model{
 
 		$data = array(
 					'lname' => $this->input->post('lname'),
-					'fname' => $this->input->post('fname'),
-					'mname' => $this->input->post('mname'),	
-					'contact' => $this->input->post('contact'),					
-					'email' => $this->input->post('email'),
-					'password' => $this->input->post('password')
+					'fname' => $this->input->post('fname'),					
+					'password' => $this->encrypt->encode($this->input->post('password')),
 					);
 		$this->db->where('id', $id);
 		$this->db->update('users', $data);
